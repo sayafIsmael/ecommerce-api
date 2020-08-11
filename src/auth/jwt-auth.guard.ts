@@ -19,8 +19,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         if (err || !user) {
             throw err || new UnauthorizedException();
         }
-        Logger.log(user)
-        user.roles = ['ADMIN_UPDATE_OWN_VIDEO', 'USER_CREATE_ANY_VIDEO']
+        user.roles = ['admin']
         return user;
     }
 }

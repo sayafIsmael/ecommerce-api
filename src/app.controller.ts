@@ -1,13 +1,12 @@
-import { Controller, Get, Request, Post, UseGuards, Body} from '@nestjs/common';
+import { Controller, Get, Request, Post, UseGuards, Body } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { ACGuard, UseRoles, UserRoles } from 'nest-access-control';
-import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(private authService: AuthService, private readonly appService: AppService) { }
+  constructor(private authService: AuthService) { }
 
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
@@ -22,13 +21,13 @@ export class AppController {
 
   @UseGuards(JwtAuthGuard, ACGuard)
   @UseRoles({
-    resource: 'video',
+    resource: 'product',
     action: 'read',
     possession: 'any',
   })
   @Get()
   root(@UserRoles() userRoles: any) {
-    return this.appService.root(userRoles);
+    return userRoles;
   }
 
   @UseGuards(JwtAuthGuard)
